@@ -15,5 +15,5 @@ docker load < custom-container.tar
 docker update --restart always <nome_container>
 
 - Logs e inspecao
-docker log nome_container
+docker logs nome_container
 docker inspect nome_container
