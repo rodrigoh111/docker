@@ -1,0 +1,61 @@
+FROM ubuntu:24.04
+
+# Instala o Samba e dependencias
+RUN apt-get update && \
+    apt-get install -y samba nano && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Cria diretório compartilhado
+RUN mkdir -p /shared && \
+    chmod 1777 /shared
+
+# Criar o usuário com shell /bin/bash
+RUN useradd -m -s /bin/bash infra && \
+    echo "infra:1313" | chpasswd
+
+# Adiciona o usuário ao Samba e define a senha (a mesma)
+RUN (echo "1313"; echo "1313") | smbpasswd -a -s infra
+
+# Expõe portas do Samba
+EXPOSE 137/udp 138/udp 139/tcp 445/tcp
+
+# Define volume para configurações persistentes
+VOLUME /etc/samba
+
+# Copiar arquivo de configuração
+COPY smb.conf /etc/samba/smb.conf
+
+# Inicia o Samba em primeiro plano
+CMD ["smbd", "--foreground", "--debug-stdout", "--no-process-group"]
+
+
+
+### CONFIGURACAO
+Podemos alterar o volume criando um volume para os arquivos
+docker volume create samba
+
+### Verificar usuarios do samba
+docker exec -it samba-server pdbedit -L
+
+### CRIAR ARQUIVO smb.conf
+[global]
+   workgroup = WORKGROUP
+   server string = Samba Server
+   netbios name = samba-server
+   security = user
+   map to guest = bad user
+   dns proxy = no
+
+[arquivos]
+   comment = web
+   path = /mnt/shared
+   browseable = true
+   create mask = 0777
+   directory mask = 0777
+   writeable = true
+   read only = no
+   valid users = infra
+
+### INICIAR CONTAINER
+docker run -d -p 445:445 -p 139:139 --name samba-server --restart=always -m 2048M --cpus 2.0 --env TZ=America/Sao_Paulo --privileged -v samba/:/shared samba-server
