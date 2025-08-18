@@ -1,6 +1,6 @@
 # Comamdos
 - Update container
-docker update 5085 -m 2048M --cpus 0.9
+docker update nome_container -m 2048M --cpus 0.9
 
 - Commit imagem
 docker commit ID_CONTAINER custom_container:version1
