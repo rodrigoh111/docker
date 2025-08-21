@@ -38,6 +38,8 @@ docker volume create samba
 ### Verificar usuarios do samba
 docker exec -it samba-server pdbedit -L
 
+Criar pasta no sistema para montar o volume
+
 ### CRIAR ARQUIVO smb.conf
 [global]
    workgroup = WORKGROUP
