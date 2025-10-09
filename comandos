@@ -17,3 +17,7 @@ docker update --restart always <nome_container>
 - Logs e inspecao
 docker logs nome_container
 docker inspect nome_container
+
+
+-Limpeza de log do apache
+docker exec -ti 7 container truncate -s 0 /var/log/apache2/access.log
