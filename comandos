@@ -18,6 +18,16 @@ docker update --restart always <nome_container>
 docker logs nome_container
 docker inspect nome_container
 
+- Ver quais snapshots estao ativos
+ctr -n moby snapshots ls
+
+- Limpar snapshots não usados
+docker system prune -a
+
+- Limpar build cache
+Limpar build cache
 
 -Limpeza de log do apache
 docker exec -ti 7 container truncate -s 0 /var/log/apache2/access.log
+
+
