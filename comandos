@@ -30,4 +30,18 @@ Limpar build cache
 -Limpeza de log do apache
 docker exec -ti 7 container truncate -s 0 /var/log/apache2/access.log
 
+- Verificar images e limpeza segura
+docker image ls
+docker image prune -a
+
+- Remover containers parados
+docker container prune
+
+- Verificar e remover volumes
+docker volume ls
+docker volume prune
+
+- Limpar tudo que não esta sendo usado
+docker system prune -af --volumes
+
 
